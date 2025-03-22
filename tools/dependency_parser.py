@@ -17,6 +17,7 @@ def parse_dependencies(file_name: str, file_content: str) -> list:
     )
     response = model.call_gpt4o(prompt)
     
+    print(response)
     #  parse the JSON response.
 
-    return ["dependency1", "dependency2"]
+    return []

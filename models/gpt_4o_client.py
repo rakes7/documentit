@@ -1,6 +1,7 @@
 # models/gpt4o_client.py
 
 import json
+import os
 from openai import OpenAI
 
 class Model:
@@ -10,7 +11,8 @@ class Model:
 
     def __init__(self):
         # In a real scenario, you might pass an API key or other credentials.
-        self.client = OpenAI()
+        API_KEY = os.getenv("OPENAI_API_KEY")
+        self.client = OpenAI(api_key=API_KEY)
 
     def call_gpt4o(self, prompt: str) -> str:
         """
@@ -19,7 +21,7 @@ class Model:
         ones needed for your OpenAI client call.
         """
         response = self.client.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             prompt=prompt,
             temperature=0
         )
