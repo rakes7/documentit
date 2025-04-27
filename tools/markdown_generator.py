@@ -1,12 +1,14 @@
 # tools/markdown_generator.py
 
-from models.gpt4o_client import call_gpt
+from models.gpt_4o_client import Model
 
 def generate_markdown_v1(file_name: str, file_content: str, dependencies: list) -> str:
     """
     Use gpt4o to generate Markdown documentation for the file.
     The prompt includes the file's content and its dependencies.
     """
+    model = Model()
+
     prompt = (
         f"Generate documentation for the file '{file_name}'.\n\n"
         f"File Content:\n{file_content}\n\n"
@@ -14,7 +16,7 @@ def generate_markdown_v1(file_name: str, file_content: str, dependencies: list) 
         "Write detailed documentation in Markdown format explaining the purpose of the file, its functionality, "
         "and how it interacts with its dependencies."
     )
-    markdown = call_gpt(prompt)
+    markdown = model.call_gpt(prompt)
     return markdown
 
 def generate_markdown(file_name: str, file_content: str, dependencies: list) -> str:
@@ -22,6 +24,7 @@ def generate_markdown(file_name: str, file_content: str, dependencies: list) -> 
     Use gpt4o to generate Markdown documentation for the file.
     The prompt includes the file's content and its dependencies.
     """
+    model = Model()
     prompt = (
         f"Generate comprehensive Markdown documentation for the Python file '{file_name}'.\n\n"
         f"## File Content:\n```python\n{file_content}\n```\n\n"
@@ -43,5 +46,5 @@ def generate_markdown(file_name: str, file_content: str, dependencies: list) -> 
         f"    * Mention any important assumptions the code makes or any potential caveats.\n\n"
         f"Ensure the documentation is written in clear English and uses standard Markdown formatting (e.g., code blocks for code, bolding for emphasis)."
     )
-    markdown = call_gpt(prompt)
+    markdown = model.call_gpt(prompt)
     return markdown

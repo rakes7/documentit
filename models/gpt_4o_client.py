@@ -1,8 +1,9 @@
-# models/gpt4o_client.py
-
 import json
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Model:
     """
@@ -12,27 +13,25 @@ class Model:
     def __init__(self):
         # In a real scenario, you might pass an API key or other credentials.
         API_KEY = os.getenv("OPENAI_API_KEY")
-        #model=os.getenv("MODEL")
         self.client = OpenAI(api_key=API_KEY)
 
     def call_gpt(self, prompt: str) -> str:
         """
         Call the GPT-4–style model with the provided prompt and return a text response.
-        Replace 'model="gpt-4o"' and the relevant parameters with the actual
-        ones needed for your OpenAI client call.
+        Uses the chat completion endpoint which is correct for gpt-4o models.
         """
-        response = self.client.completions.create(
+        response = self.client.chat.completions.create(
             model="gpt-4o-mini",
-            prompt=prompt,
+            messages=[{"role": "user", "content": prompt}],
             temperature=0
         )
-        # Adjust indexing if your client returns the data differently.
-        return response["choices"][0]["text"]
+        # Extract the text from the message content
+        return response.choices[0].message.content
 
     def call_gpt_for_json(self, prompt: str) -> dict:
         """
         Call gpt4o and expect a JSON response.
-        We first call 'call_gpt4o' to get a text response, then try to parse it as JSON.
+        We first call 'call_gpt' to get a text response, then try to parse it as JSON.
         If parsing fails, we return an empty dict. In a production system, you would
         want more robust error handling or retry logic.
         """

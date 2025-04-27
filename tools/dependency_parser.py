@@ -1,6 +1,6 @@
 # tools/dependency_parser.py
 
-from models.gpt4o_client import Model
+from models.gpt_4o_client import Model
 
 def parse_dependencies(file_name: str, file_content: str) -> list:
     """
@@ -12,12 +12,25 @@ def parse_dependencies(file_name: str, file_content: str) -> list:
     prompt = (
         f"Analyze the following file: {file_name}\n\n"
         f"Content:\n{file_content}\n\n"
-        "List all external dependencies (e.g., imported modules, packages, libraries, or references) "
-        "in JSON format as a list. For example: [\"dependency1\", \"dependency2\"]"
+        "Extract all external dependencies from this file. External dependencies include:\n"
+        "- Python import statements (e.g., 'import numpy', 'from pandas import DataFrame')\n"
+        "- Package references in requirements\n"
+        "- External libraries or frameworks used\n\n"
+        "Return ONLY a valid JSON array of strings with the base package names, without versions or submodules.\n"
+        "For example: [\"numpy\", \"pandas\", \"requests\"]\n\n"
+        "Do not include:\n"
+        "- Standard library modules (like os, sys, datetime)\n"
+        "- Internal/relative imports (from .module import X)\n"
+        "- Comments or explanations\n\n"
+        "Return only the JSON array."
     )
     response = model.call_gpt(prompt)
     
-    print(response)
-    #  parse the JSON response.
-
-    return []
+    # Parse the JSON response
+    import json
+    try:
+        dependencies = json.loads(response.strip())
+        return dependencies
+    except json.JSONDecodeError:
+        print("Failed to parse JSON response")
+        return []
