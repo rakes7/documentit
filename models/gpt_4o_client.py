@@ -12,6 +12,7 @@ class Model:
     def __init__(self):
         # In a real scenario, you might pass an API key or other credentials.
         API_KEY = os.getenv("OPENAI_API_KEY")
+        #model=os.getenv("MODEL")
         self.client = OpenAI(api_key=API_KEY)
 
     def call_gpt4o(self, prompt: str) -> str:

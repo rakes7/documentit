@@ -2,7 +2,7 @@
 
 import os
 
-SUPPORTED_EXTENSIONS = {".py", ".java", ".tf", ".yaml"}
+SUPPORTED_EXTENSIONS = {".py", ".java", ".tf", ".yaml", ".json",  ".sh", ".js", ".ts"}
 
 def map_files(root_dir: str) -> dict:
     """
