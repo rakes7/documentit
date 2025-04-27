@@ -15,7 +15,7 @@ def parse_dependencies(file_name: str, file_content: str) -> list:
         "List all external dependencies (e.g., imported modules, packages, libraries, or references) "
         "in JSON format as a list. For example: [\"dependency1\", \"dependency2\"]"
     )
-    response = model.call_gpt4o(prompt)
+    response = model.call_gpt(prompt)
     
     print(response)
     #  parse the JSON response.

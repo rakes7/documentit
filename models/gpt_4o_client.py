@@ -15,7 +15,7 @@ class Model:
         #model=os.getenv("MODEL")
         self.client = OpenAI(api_key=API_KEY)
 
-    def call_gpt4o(self, prompt: str) -> str:
+    def call_gpt(self, prompt: str) -> str:
         """
         Call the GPT-4–style model with the provided prompt and return a text response.
         Replace 'model="gpt-4o"' and the relevant parameters with the actual
@@ -29,14 +29,14 @@ class Model:
         # Adjust indexing if your client returns the data differently.
         return response["choices"][0]["text"]
 
-    def call_gpt4o_for_json(self, prompt: str) -> dict:
+    def call_gpt_for_json(self, prompt: str) -> dict:
         """
         Call gpt4o and expect a JSON response.
         We first call 'call_gpt4o' to get a text response, then try to parse it as JSON.
         If parsing fails, we return an empty dict. In a production system, you would
         want more robust error handling or retry logic.
         """
-        response_text = self.call_gpt4o(prompt)
+        response_text = self.call_gpt(prompt)
         try:
             response_json = json.loads(response_text)
             return response_json
