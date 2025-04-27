@@ -12,15 +12,15 @@ def parse_dependencies(file_name: str, file_content: str) -> list:
     prompt = (
         f"Analyze the following file: {file_name}\n\n"
         f"Content:\n{file_content}\n\n"
-        "Extract all external dependencies from this file. External dependencies include:\n"
-        "- Python import statements (e.g., 'import numpy', 'from pandas import DataFrame')\n"
-        "- Package references in requirements\n"
-        "- External libraries or frameworks used\n\n"
-        "Return ONLY a valid JSON array of strings with the base package names, without versions or submodules.\n"
-        "For example: [\"numpy\", \"pandas\", \"requests\"]\n\n"
+        "Extract ONLY internal project module/script dependencies from this file. These include:\n"
+        "- Relative imports (e.g., 'from .module import X', 'from ..utils import Y')\n"
+        "- Absolute imports that reference project-specific modules (e.g., 'from project_name.module import Z')\n"
+        "- Any other references to files or modules that appear to be part of the same project\n\n"
+        "Return ONLY a valid JSON array of strings with the full import paths.\n"
+        "For example: [\".module\", \"..utils\", \"project_name.module\"]\n\n"
         "Do not include:\n"
         "- Standard library modules (like os, sys, datetime)\n"
-        "- Internal/relative imports (from .module import X)\n"
+        "- External/third-party library imports (like numpy, pandas, requests)\n"
         "- Comments or explanations\n\n"
         "Return only the JSON array."
     )
@@ -29,7 +29,11 @@ def parse_dependencies(file_name: str, file_content: str) -> list:
     # Parse the JSON response
     import json
     try:
+        print(f"Raw response: {response}")  # Debugging output
+
         dependencies = json.loads(response.strip())
+        print(f"Dependencies for {file_name}: {dependencies}")  # Debugging output
+
         return dependencies
     except json.JSONDecodeError:
         print("Failed to parse JSON response")
